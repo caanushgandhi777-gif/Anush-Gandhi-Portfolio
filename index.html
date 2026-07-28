@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anush Gandhi — Chartered Accountant · Finance Professional</title>
+<style>
+  :root{
+    --bg:#0a0e14;
+    --bg-alt:#10151d;
+    --bg-card:#131922;
+    --fg:#e6e9ef;
+    --muted:#8b96a5;
+    --muted-dim:#5a6472;
+    --accent:#34d399;
+    --accent-dim:#1f8a63;
+    --accent-2:#f43f5e;
+    --border:rgba(255,255,255,.08);
+    --border-strong:rgba(255,255,255,.16);
+    --mono: 'SFMono-Regular','JetBrains Mono',Consolas,'Courier New',monospace;
+    --serif: Georgia,'Iowan Old Style','Cambria','Times New Roman',serif;
+    --sans: 'Segoe UI',-apple-system,'Helvetica Neue',Roboto,Arial,sans-serif;
+  }
+  :root[data-theme="light"]{
+    --bg:#f4f5f7;
+    --bg-alt:#ffffff;
+    --bg-card:#ffffff;
+    --fg:#161b22;
+    --muted:#5b6472;
+    --muted-dim:#8b96a5;
+    --accent:#0f9d67;
+    --accent-dim:#0c7d52;
+    --accent-2:#e11d48;
+    --border:rgba(0,0,0,.08);
+    --border-strong:rgba(0,0,0,.16);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    background:var(--bg);
+    color:var(--fg);
+    line-height:1.7;
+    font-size:15.5px;
+    transition:background .3s, color .3s;
+  }
+  h1.name, h2.title, .brand, .disc-card h3, .facet-panel h3, .eng-card h4, .ledger-title, .ach-body h4, .creed-eyebrow{
+    font-family:var(--serif);
+  }
+  .creed-verse, .creed-translation{font-family:'Nirmala UI','Noto Sans Devanagari',var(--serif);}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px;}
+  ::selection{background:var(--accent);color:var(--bg);}
+
+  /* ===== BOOT SCREEN ===== */
+  #boot{
+    position:fixed;inset:0;background:#05070a;color:#c9d1d9;z-index:999;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:0 8vw;font-family:var(--mono);
+    transition:opacity .5s ease, visibility .5s ease;
+  }
+  #boot.hide{opacity:0;visibility:hidden;pointer-events:none;}
+  .boot-line{font-size:1.05rem;margin-bottom:10px;min-height:1.4em;color:#c9d1d9;}
+  .boot-line .prompt{color:var(--accent);}
+  .boot-line .formula{color:#9fd6ff;}
+  .boot-cursor{display:inline-block;width:8px;height:1em;background:var(--accent);vertical-align:text-bottom;animation:blink 1s steps(1) infinite;}
+  @keyframes blink{50%{opacity:0;}}
+  .boot-bar-wrap{margin-top:22px;width:min(420px,80vw);}
+  .boot-bar-track{height:3px;background:#1c222b;border-radius:2px;overflow:hidden;}
+  .boot-bar-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent-dim),var(--accent));transition:width .15s linear;}
+  .boot-bar-meta{display:flex;justify-content:space-between;font-size:.72rem;color:#5a6472;margin-top:8px;letter-spacing:.5px;}
+  #boot-skip{
+    position:absolute;bottom:28px;right:8vw;font-size:.75rem;color:#5a6472;
+    border:1px solid #232a34;padding:6px 14px;border-radius:3px;cursor:pointer;
+  }
+  #boot-skip:hover{color:var(--accent);border-color:var(--accent-dim);}
+
+  /* ===== NAV ===== */
+  header.nav{
+    position:sticky;top:0;z-index:50;
+    background:rgba(10,14,20,.85);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--border);
+  }
+  :root[data-theme="light"] header.nav{background:rgba(255,255,255,.85);}
+  .nav-inner{
+    max-width:1080px;margin:0 auto;padding:14px 24px;
+    display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;
+  }
+  .brand{font-size:.95rem;font-weight:700;letter-spacing:.5px;color:var(--fg);}
+  .brand .dot{color:var(--accent);}
+  nav.links{display:flex;gap:22px;align-items:center;}
+  nav.links a{color:var(--muted);font-size:.8rem;letter-spacing:.3px;transition:color .2s;}
+  nav.links a:hover{color:var(--accent);}
+  .nav-right{display:flex;align-items:center;gap:14px;}
+  #clock{font-size:.72rem;color:var(--muted-dim);letter-spacing:.5px;font-family:var(--mono);}
+  #theme-toggle{
+    font-family:var(--mono);font-size:.68rem;font-weight:700;letter-spacing:.5px;
+    background:var(--bg-card);border:1px solid var(--border-strong);color:var(--muted);
+    padding:6px 10px;border-radius:3px;cursor:pointer;transition:all .2s;
+  }
+  #theme-toggle:hover{color:var(--accent);border-color:var(--accent-dim);}
+
+  /* ===== SECTION SCAFFOLDING ===== */
+  section{padding:88px 0;border-bottom:1px solid var(--border);}
+  .tag-index{
+    font-size:.78rem;color:var(--accent);letter-spacing:.5px;margin-bottom:14px;
+    display:flex;align-items:center;gap:10px;font-family:var(--mono);
+  }
+  .tag-index::before{content:"";width:26px;height:1px;background:var(--accent-dim);}
+  h2.title{font-size:2rem;font-weight:700;color:var(--fg);margin-bottom:14px;letter-spacing:-.5px;}
+  h2.title .hl{color:var(--accent);}
+  .subtext{color:var(--muted);max-width:620px;margin-bottom:44px;font-size:.92rem;}
+
+  /* ===== HERO ===== */
+  .hero{
+    position:relative;overflow:hidden;border-bottom:1px solid var(--border);
+    min-height:88vh;display:flex;align-items:center;padding:120px 0 64px;
+  }
+  .word-cloud{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+  .float-word{
+    position:absolute;font-weight:700;white-space:nowrap;letter-spacing:.3px;
+    animation:drift var(--dur,30s) ease-in-out infinite alternate;
+    animation-delay:var(--delay,0s);
+  }
+  @keyframes drift{
+    from{transform:translate(0,0) scale(1);}
+    to{transform:translate(var(--dx,24px),var(--dy,-32px)) scale(var(--sc,1.04));}
+  }
+  .hero-content{position:relative;z-index:2;max-width:760px;}
+  .hero-id-row{display:flex;align-items:center;gap:14px;margin-bottom:20px;flex-wrap:wrap;}
+  .avatar-chip{
+    width:46px;height:46px;border-radius:50%;overflow:hidden;flex-shrink:0;
+    border:1px solid var(--border-strong);background:var(--bg-card);
+    display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--accent-dim);font-size:.95rem;
+  }
+  .avatar-chip img{width:100%;height:100%;object-fit:cover;display:block;}
+  .status-row{display:flex;align-items:center;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+  .pill{
+    font-size:.72rem;padding:5px 12px;border-radius:20px;border:1px solid var(--border-strong);
+    color:var(--muted);letter-spacing:.3px;background:var(--bg);font-family:var(--mono);
+  }
+  .pill.live{color:var(--accent);border-color:var(--accent-dim);}
+  .pill.live::before{content:"● ";}
+  .idx-badge{font-size:.78rem;color:var(--muted-dim);font-family:var(--mono);}
+  h1.name{font-size:3.6rem;font-weight:800;letter-spacing:-1.5px;line-height:1.05;margin-bottom:18px;}
+  h1.name .last{color:var(--accent);}
+  .role-line{color:var(--muted);font-size:1.1rem;margin-bottom:30px;max-width:600px;}
+  .hero-ctas{display:flex;gap:14px;flex-wrap:wrap;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;padding:12px 22px;border-radius:3px;
+    font-size:.8rem;letter-spacing:.4px;font-weight:600;font-family:var(--mono);transition:all .2s;
+  }
+  .btn-primary{background:var(--accent);color:#04140d;}
+  .btn-primary:hover{background:var(--accent-dim);}
+  .btn-outline{border:1px solid var(--border-strong);color:var(--fg);background:var(--bg);}
+  .btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+
+  /* ===== CREED (Sanskrit verse) ===== */
+  .creed{text-align:center;background:var(--bg-alt);}
+  .creed-rule{width:60px;height:1px;background:var(--accent-dim);margin:0 auto 28px;}
+  .creed-eyebrow{font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted-dim);margin-bottom:28px;}
+  .creed-verse{
+    font-size:1.55rem;line-height:2.1;color:var(--accent);font-weight:600;margin:0 auto 26px;max-width:680px;
+  }
+  .creed-translation{font-style:italic;color:var(--muted);max-width:540px;margin:0 auto 18px;font-size:.98rem;line-height:1.85;}
+  .creed-source{font-size:.72rem;color:var(--muted-dim);letter-spacing:.5px;}
+
+  .hero-photo-wrap{position:relative;}
+  .photo-frame{
+    aspect-ratio:4/5;border-radius:6px;overflow:hidden;border:1px solid var(--border-strong);
+    background:linear-gradient(150deg,var(--bg-card),var(--bg-alt));
+    display:flex;align-items:center;justify-content:center;position:relative;
+  }
+  .photo-frame img{width:100%;height:100%;object-fit:cover;display:block;}
+  .photo-fallback{
+    display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    color:var(--muted-dim);position:absolute;inset:0;
+  }
+  .photo-fallback .mono{font-size:3.5rem;font-weight:800;color:var(--accent-dim);}
+  .photo-cap{
+    position:absolute;bottom:12px;left:12px;background:var(--bg);border:1px solid var(--border-strong);
+    padding:5px 10px;border-radius:3px;font-size:.7rem;color:var(--muted);letter-spacing:.3px;
+  }
+
+  /* ===== PHILOSOPHY ===== */
+  .philosophy-lead{font-size:1.15rem;color:var(--fg);max-width:720px;margin-bottom:22px;line-height:1.85;}
+  .principle-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px;}
+  .principle-chip{
+    font-size:.78rem;padding:8px 16px;border:1px solid var(--border-strong);border-radius:20px;
+    color:var(--muted);background:var(--bg-card);font-family:var(--mono);
+  }
+  .practice-heading{font-size:.78rem;text-transform:uppercase;letter-spacing:1px;color:var(--muted-dim);margin-bottom:20px;}
+
+  /* ===== DISCIPLINES (two truths) ===== */
+  .disc-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
+  .disc-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:32px;
+    position:relative;overflow:hidden;
+  }
+  .disc-card::before{content:"";position:absolute;top:0;left:0;width:100%;height:2px;}
+  .disc-card.verify::before{background:var(--accent);}
+  .disc-card.judge::before{background:var(--accent-2);}
+  .disc-eyebrow{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted-dim);margin-bottom:10px;}
+  .disc-card h3{font-size:1.4rem;margin-bottom:14px;color:var(--fg);}
+  .disc-card.judge h3{color:var(--fg);}
+  .disc-card p{color:var(--muted);font-size:.9rem;margin-bottom:16px;}
+  .disc-meta{display:flex;gap:18px;font-size:.75rem;color:var(--muted-dim);flex-wrap:wrap;}
+  .disc-meta b{color:var(--fg);}
+
+  /* ===== ABOUT / FACETS TOGGLE ===== */
+  .who-layout{display:grid;grid-template-columns:1fr 220px;gap:40px;align-items:start;}
+  .who-portrait .photo-frame{aspect-ratio:3/4;}
+  .who-portrait .mono{font-size:2.4rem;}
+  .facets-nav{display:flex;gap:10px;margin-bottom:32px;flex-wrap:wrap;}
+  .facet-btn{
+    font-family:var(--mono);font-size:.82rem;padding:10px 18px;border-radius:3px;
+    border:1px solid var(--border-strong);background:transparent;color:var(--muted);cursor:pointer;transition:all .2s;
+  }
+  .facet-btn.active{background:var(--accent);color:#04140d;border-color:var(--accent);font-weight:700;}
+  .facet-panel{display:none;background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:36px;}
+  .facet-panel.active{display:block;animation:fadein .35s ease;}
+  @keyframes fadein{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+  .facet-panel h3{font-size:1.5rem;margin-bottom:14px;}
+  .facet-panel h3 .hl{color:var(--accent);}
+  .facet-panel p{color:var(--muted);margin-bottom:24px;max-width:640px;font-size:.92rem;}
+  .facet-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:20px;}
+  .fstat b{display:block;font-size:1.6rem;color:var(--accent);font-weight:800;font-family:var(--mono);}
+  .fstat span{font-size:.75rem;color:var(--muted-dim);letter-spacing:.3px;}
+
+  /* ===== ENGAGEMENTS (selected work) ===== */
+  .eng-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px;}
+  .eng-card{
+    background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:26px;
+    transition:border-color .2s, transform .2s;
+  }
+  .eng-card:hover{border-color:var(--accent-dim);transform:translateY(-3px);}
+  .eng-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;}
+  .eng-tags span{font-size:.68rem;color:var(--accent);border:1px solid var(--accent-dim);padding:3px 9px;border-radius:20px;font-family:var(--mono);}
+  .eng-card h4{font-size:1.05rem;margin-bottom:10px;color:var(--fg);}
+  .eng-card p{color:var(--muted);font-size:.85rem;}
+
+  /* ===== CAREER LEDGER ===== */
+  .ledger-prompt{
+    font-size:.82rem;color:var(--muted-dim);margin-bottom:32px;background:var(--bg-card);
+    border:1px solid var(--border);border-radius:4px;padding:12px 16px;font-family:var(--mono);
+  }
+  .ledger-prompt .p1{color:var(--accent);}
+  .ledger-item{
+    border:1px solid var(--border);border-radius:6px;padding:26px 28px;margin-bottom:20px;background:var(--bg-card);
+  }
+  .ledger-head{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:6px;align-items:baseline;}
+  .ledger-id{font-size:.78rem;color:var(--muted-dim);font-family:var(--mono);}
+  .ledger-id .hash{color:var(--accent);}
+  .ledger-status{font-size:.68rem;padding:2px 9px;border-radius:20px;border:1px solid var(--accent-dim);color:var(--accent);}
+  .ledger-date{font-size:.75rem;color:var(--muted-dim);margin-bottom:14px;}
+  .ledger-title{font-size:1.15rem;margin-bottom:4px;}
+  .ledger-title .fx{color:var(--accent);}
+  .ledger-org{font-size:.85rem;color:var(--muted);margin-bottom:16px;}
+  .ledger-org b{color:var(--fg);}
+  .ledger-item ul{padding-left:20px;margin-bottom:16px;}
+  .ledger-item li{font-size:.88rem;color:var(--muted);margin-bottom:6px;}
+  .ledger-item li b{color:var(--fg);}
+  .ledger-stack{display:flex;gap:8px;flex-wrap:wrap;font-size:.7rem;font-family:var(--mono);}
+  .ledger-stack span{color:var(--muted-dim);border:1px solid var(--border-strong);padding:3px 9px;border-radius:3px;}
+
+  /* ===== EDUCATION (spreadsheet) ===== */
+  .sheet{border:1px solid var(--border-strong);border-radius:6px;overflow:hidden;}
+  table{width:100%;border-collapse:collapse;background:var(--bg-card);}
+  thead th{
+    background:var(--bg-alt);color:var(--muted-dim);text-align:left;padding:12px 16px;
+    font-size:.68rem;text-transform:uppercase;letter-spacing:.6px;font-weight:700;border-bottom:1px solid var(--border-strong);
+  }
+  tbody td{padding:14px 16px;border-bottom:1px solid var(--border);font-size:.85rem;color:var(--fg);}
+  tbody tr:last-child td{border-bottom:none;}
+  tbody tr:hover{background:var(--bg-alt);}
+  tbody td.score{color:var(--accent);font-weight:700;font-family:var(--mono);}
+  .cellref{color:var(--muted-dim);font-size:.68rem;font-family:var(--mono);}
+
+  /* ===== SKILLS ===== */
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
+  .skill-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;padding:22px;}
+  .skill-card h4{color:var(--accent);font-size:.82rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border);}
+  .tag-list{display:flex;flex-wrap:wrap;gap:8px;}
+  .tag{background:var(--bg-alt);border:1px solid var(--border-strong);color:var(--muted);font-size:.74rem;padding:5px 11px;border-radius:20px;font-family:var(--mono);}
+
+  /* ===== ACHIEVEMENTS / PHOTOS ===== */
+  .ach-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:20px;}
+  .ach-card{background:var(--bg-card);border:1px solid var(--border);border-radius:6px;overflow:hidden;transition:transform .2s;}
+  .ach-card:hover{transform:translateY(-3px);}
+  .ach-photo{aspect-ratio:4/3;background:linear-gradient(150deg,var(--bg-alt),var(--bg-card));display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+  .ach-photo img{width:100%;height:100%;object-fit:cover;display:block;}
+  .ach-photo .icon{font-size:2rem;color:var(--muted-dim);display:none;}
+  .ach-body{padding:18px 20px;}
+  .ach-body h4{font-size:.92rem;margin-bottom:6px;color:var(--fg);}
+  .ach-body p{color:var(--muted);font-size:.8rem;}
+
+  /* ===== CONTACT / FOOTER ===== */
+  footer{padding:64px 0 32px;}
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:24px;margin-bottom:40px;}
+  .contact-item{border:1px solid var(--border);border-radius:6px;padding:20px;background:var(--bg-card);}
+  .contact-item h5{color:var(--accent);font-size:.68rem;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px;}
+  .contact-item a,.contact-item span{color:var(--fg);font-size:.9rem;}
+  .footer-bottom{border-top:1px solid var(--border);padding-top:20px;text-align:center;font-size:.75rem;color:var(--muted-dim);}
+
+  @media (max-width:800px){
+    .disc-grid{grid-template-columns:1fr;}
+    .who-layout{grid-template-columns:1fr;}
+    .who-portrait{order:-1;max-width:200px;margin:0 auto 12px;}
+    nav.links{display:none;}
+    h1.name{font-size:2.3rem;}
+    table{font-size:.78rem;}
+    .creed-verse{font-size:1.2rem;line-height:1.9;}
+  }
+</style>
+</head>
+<body>
+
+<div id="boot">
+  <div class="boot-line"><span class="prompt">$</span> open workbook.xlsx</div>
+  <div class="boot-line" id="bl2"></div>
+  <div class="boot-line" id="bl3"></div>
+  <div class="boot-bar-wrap">
+    <div class="boot-bar-track"><div class="boot-bar-fill" id="bootFill"></div></div>
+    <div class="boot-bar-meta"><span id="bootLabel">Calculating…</span><span id="bootPct">0%</span></div>
+  </div>
+  <div id="boot-skip">Skip →</div>
+</div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="brand">ANUSH GANDHI</div>
+    <nav class="links">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#about">Facets</a>
+      <a href="#engagements">Engagements</a>
+      <a href="#ledger">Ledger</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <div class="nav-right">
+      <span id="clock">--:--:-- IST</span>
+      <button id="theme-toggle">Dr / Cr</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="word-cloud" id="wordCloud"></div>
+  <div class="wrap hero-content">
+    <div class="hero-id-row">
+      <div class="avatar-chip">
+        <img src="photos/hero.jpg" alt="Anush Gandhi" onerror="this.style.display='none'; this.parentElement.textContent='AG';">
+      </div>
+      <span class="idx-badge">(01)</span>
+    </div>
+    <div class="status-row">
+      <span class="pill">Chartered Accountant · Finance Professional</span>
+      <span class="pill live">Assistant Manager – Finance, Mohan Mutha Exports</span>
+    </div>
+    <h1 class="name">Anush <span class="last">Gandhi</span></h1>
+    <p class="role-line">Audit &amp; Assurance · Direct Taxation · Tender Finance &amp; Cross-Border Treasury — based in Chennai, India.</p>
+    <div class="hero-ctas">
+      <a href="#philosophy" class="btn btn-primary">Read My Philosophy</a>
+      <a href="Anush Gandhi Work Profile.pdf" class="btn btn-outline" target="_blank">Résumé ↓</a>
+    </div>
+  </div>
+</section>
+
+<section class="creed">
+  <div class="wrap">
+    <div class="creed-rule"></div>
+    <div class="creed-eyebrow">A verse I carry · Bhagavad Gītā 6.5–6.6</div>
+    <div class="creed-verse">
+      उद्धरेदात्मनात्मानं नात्मानमवसादयेत्।<br>
+      आत्मैव ह्यात्मनो बन्धुरात्मैव रिपुरात्मनः॥
+    </div>
+    <p class="creed-translation">"Lift yourself through your own efforts; never allow yourself to fall. You are your own greatest ally, and you are your own greatest obstacle."</p>
+    <div class="creed-source">— Bhagavad Gītā, Chapter 6</div>
+  </div>
+</section>
+
+<section id="philosophy">
+  <div class="wrap">
+    <div class="tag-index">(02) — Core principle</div>
+    <h2 class="title">Maximum utilisation<span class="hl"> of existing resources.</span></h2>
+    <p class="philosophy-lead">Before reaching for more time, more headcount, or more capital, I ask what's already on hand — an audit lens applied to a treasury problem, a reconciliation automated with software already licensed, a second read on a portfolio no one thought to re-underwrite. But utilisation only compounds if the toolkit keeps expanding, so I stay curious by design — exploring finance, economics, technology and strategy beyond my brief, and closing every day having learned something beyond the obvious.</p>
+    <div class="principle-row">
+      <span class="principle-chip">Curiosity</span>
+      <span class="principle-chip">Continuous improvement</span>
+      <span class="principle-chip">Lifelong learning</span>
+      <span class="principle-chip">Solving complex problems</span>
+      <span class="principle-chip">Exploring new domains</span>
+    </div>
+    <div class="practice-heading">How it shows up in practice</div>
+    <div class="disc-grid">
+      <div class="disc-card verify">
+        <div class="disc-eyebrow">Audit &amp; Assurance</div>
+        <h3>Verification</h3>
+        <p>Every number traces back to evidence. Internal audits, IFC reviews, tax audits, fixed-asset verification — the standard doesn't move, so the work has to be exact, documented, and defensible before the Tribunal or the client's board.</p>
+        <div class="disc-meta"><span><b>2</b> firms trained under</span><span><b>₹25,000 Cr</b> AUM audited (IFC)</span></div>
+      </div>
+      <div class="disc-card judge">
+        <div class="disc-eyebrow">Tender &amp; Treasury</div>
+        <h3>Judgement</h3>
+        <p>Bid capacity, working-capital adequacy, fund flow across three countries — none of it comes with a formula sheet. It's reading a project, a banker, and a deadline at once, and deciding what the numbers should do next.</p>
+        <div class="disc-meta"><span><b>3</b> countries — India, UAE, Maldives</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="tag-index">(03) — Who</div>
+    <h2 class="title">One person,<span class="hl"> four ledgers.</span></h2>
+    <p class="subtext">Click through — the same person resolves differently depending on which book you open. Each one is the same principle: use what's already there, fully.</p>
+
+  <div class="who-layout">
+   <div>
+    <div class="facets-nav">
+      <button class="facet-btn active" data-facet="auditor">Auditor</button>
+      <button class="facet-btn" data-facet="financier">Financier</button>
+      <button class="facet-btn" data-facet="analyst">Analyst</button>
+      <button class="facet-btn" data-facet="athlete">Athlete</button>
+    </div>
+
+    <div class="facet-panel active" data-panel="auditor">
+      <h3>The <span class="hl">Auditor</span></h3>
+      <p>Two years across Ernst &amp; Young LLP and M2K Chartered Accountants — direct-tax litigation before the CIT(A), DRP and ITAT, internal audits for textile and chemical manufacturers, and the IFC audit of a ₹25,000 Cr AUM NBFC, building Risk &amp; Control Matrices and SOPs from the ground up.</p>
+      <div class="facet-stats">
+        <div class="fstat"><b>₹70+ Cr</b><span>Refund secured before ITAT</span></div>
+        <div class="fstat"><b>₹25,000 Cr</b><span>NBFC AUM — IFC audit</span></div>
+        <div class="fstat"><b>₹1,000 Cr</b><span>Turnover — fixed-asset audit</span></div>
+      </div>
+    </div>
+
+    <div class="facet-panel" data-panel="financier">
+      <h3>The <span class="hl">Financier</span></h3>
+      <p>Now leading tender pre-qualification, bid security, bank guarantees and LOAs at Mohan Mutha Exports — plus fund planning for a Dubai free-zone subsidiary and a Maldives project, and inter-company reconciliation across the group. Between Nov 2024 and Mar 2025, co-founded Arham Capital Ventures with three fellow CAs — deploying a rolling ~₹40L capital pool across IPO cycles and advising Retail and HNI investors end-to-end, run entirely on pooled partner capital rather than outside funding.</p>
+      <div class="facet-stats">
+        <div class="fstat"><b>~15</b><span>Group entities reconciled</span></div>
+        <div class="fstat"><b>2</b><span>International subsidiaries — Dubai &amp; Maldives</span></div>
+        <div class="fstat"><b>~₹40L</b><span>Rolling capital pool — Arham Capital Ventures</span></div>
+      </div>
+    </div>
+
+    <div class="facet-panel" data-panel="analyst">
+      <h3>The <span class="hl">Analyst</span></h3>
+      <p>An early adopter of AI-driven automation — building Claude and ChatGPT workflows wired into Excel to automate multi-account bank reconciliation and expense categorisation, cutting manual effort from days to minutes.</p>
+      <div class="facet-stats">
+        <div class="fstat"><b>Days → Mins</b><span>Reconciliation turnaround</span></div>
+        <div class="fstat"><b>NSE</b><span>Certified — Financial Markets</span></div>
+        <div class="fstat"><b>CA Monk</b><span>Financial-analysis training</span></div>
+      </div>
+    </div>
+
+    <div class="facet-panel" data-panel="athlete">
+      <h3>The <span class="hl">Athlete</span></h3>
+      <p>State-level gymnastics champion with multiple inter-school wins, still active in calisthenics today. Equally comfortable backpacking through 10+ cities in a year as reconciling a balance sheet at midnight.</p>
+      <div class="facet-stats">
+        <div class="fstat"><b>State</b><span>Level gymnastics champion</span></div>
+        <div class="fstat"><b>10+</b><span>Cities backpacked this year</span></div>
+        <div class="fstat"><b>2nd</b><span>Place — team treasure hunt</span></div>
+      </div>
+    </div>
+   </div>
+   <div class="who-portrait">
+    <div class="photo-frame">
+      <img src="photos/hero.jpg" alt="Anush Gandhi" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+      <div class="photo-fallback">
+        <div class="mono">AG</div>
+        <div style="font-size:.7rem;letter-spacing:.5px;text-align:center;padding:0 12px;">drop a photo at /photos/hero.jpg</div>
+      </div>
+      <div class="photo-cap">AG · Chennai · 2026</div>
+    </div>
+   </div>
+  </div>
+  </div>
+</section>
+
+<section id="engagements">
+  <div class="wrap">
+    <div class="tag-index">(04) — Selected engagements</div>
+    <h2 class="title">Things I've<span class="hl"> worked on.</span></h2>
+    <p class="subtext">Real filings, real audits, real fund flows — across borders and balance sheets.</p>
+    <div class="eng-grid">
+      <div class="eng-card">
+        <div class="eng-tags"><span>Tender Finance</span><span>Banking &amp; Treasury</span></div>
+        <h4>Tender Finance &amp; Project Funding</h4>
+        <p>Financial pre-qualification, bid security (EMD), performance bank guarantees and LOAs — managing the full project-finance lifecycle from tender to on-site execution.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-tags"><span>Dubai</span><span>Maldives</span></div>
+        <h4>International Finance &amp; Fund Planning</h4>
+        <p>Managed a Dubai free-zone subsidiary's tax computations and planning; ran fund-flow forecasting and a stock review for a Maldives project from head office.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-tags"><span>Direct Tax</span><span>ITAT · High Court</span></div>
+        <h4>Direct Tax — Compliance &amp; Litigation</h4>
+        <p>Drafted submissions before the CIT(A) and DRP at EY, helped secure a ₹70+ Cr refund before the ITAT, and contributed to Writ Petitions before the High Court.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-tags"><span>Internal Audit</span><span>IFC</span></div>
+        <h4>Audit &amp; Assurance</h4>
+        <p>Led internal audits for textile and chemical manufacturers, the IFC audit of a ₹25,000 Cr AUM NBFC, and fixed-asset verification for a ₹1,000 Cr turnover manufacturer.</p>
+      </div>
+      <div class="eng-card">
+        <div class="eng-tags"><span>Co-Founder</span><span>IPO Advisory</span></div>
+        <h4>Arham Capital Ventures <span style="color:var(--muted-dim);font-weight:400;font-size:.8em;">· Nov 2024–Mar 2025</span></h4>
+        <p>Co-founded with three fellow Chartered Accountants — deploying a rolling ~₹40L capital pool across successive IPO cycles and onboarding Retail and HNI investors end-to-end, from Demat account opening through application and allotment. The bigger return wasn't in the numbers — it was learning that client trust and team management compound faster than any single allocation.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="ledger">
+  <div class="wrap">
+    <div class="tag-index">— Career trajectory</div>
+    <h2 class="title">Where I've<span class="hl"> posted entries.</span></h2>
+    <p class="subtext">A career, read like a ledger — newest voucher on top, still posting.</p>
+    <div class="ledger-prompt"><span class="p1">$</span> ledger --account=career --branch=posted "anush.gandhi"</div>
+
+    <div class="ledger-item">
+      <div class="ledger-head">
+        <div class="ledger-id">JV <span class="hash">#2025-14</span> · HEAD → now</div>
+        <div class="ledger-status">posting</div>
+      </div>
+      <div class="ledger-date">May 2025 — Present · Chennai</div>
+      <div class="ledger-title"><span class="fx">Dr.</span> Assistant Manager — Finance</div>
+      <div class="ledger-org">@ <b>Mohan Mutha Exports Pvt Ltd</b></div>
+      <ul>
+        <li>Lead <b>tender pre-qualification</b> and manage bid security, PBGs, surety bonds and LOAs end-to-end with bankers.</li>
+        <li>Own <b>inter-company reconciliation</b> across ~15 group entities and banking/treasury relationships.</li>
+        <li>Run <b>international fund planning</b> for Dubai and Maldives subsidiaries — tax computations, cash forecasting, fund flow.</li>
+        <li>Built <b>AI-assisted reconciliation workflows</b> (Claude + ChatGPT + Excel), cutting manual effort from days to minutes.</li>
+      </ul>
+      <div class="ledger-stack"><span>Tender Finance</span><span>Treasury</span><span>Inter-company Recon</span><span>Tax Planning</span><span>AI Automation</span></div>
+    </div>
+
+    <div class="ledger-item">
+      <div class="ledger-head">
+        <div class="ledger-id">JV <span class="hash">#2024-11</span> · closed</div>
+      </div>
+      <div class="ledger-date">Nov 2024 — Mar 2025 · Chennai</div>
+      <div class="ledger-title"><span class="fx">Dr.</span> Co-Founder — Arham Capital Ventures</div>
+      <div class="ledger-org">Founded by four Chartered Accountants — IPO guidance for first-time retail investors</div>
+      <ul>
+        <li>Co-founded an <b>IPO advisory and financing venture</b> alongside three fellow Chartered Accountants — defined the service offering, operating model, and founder-level responsibilities from inception.</li>
+        <li>Deployed and managed a <b>rolling capital pool of ~₹40 lakh</b> across successive IPO cycles, optimising allocation and recycling of funds to maximise participation within each issue window.</li>
+        <li>Onboarded and advised <b>Retail and HNI investors</b> end-to-end — facilitating Demat account opening, guiding the application and allotment process, and delivering investor education on primary-market mechanics and risk.</li>
+        <li>Built a <b>streamlined operational workflow</b> across the founding team, compressing per-issue turnaround and enabling multiple applications within tight IPO windows.</li>
+      </ul>
+      <div class="ledger-stack"><span>IPO Advisory</span><span>Capital Markets</span><span>Investor Relations</span><span>Founder Operations</span></div>
+    </div>
+
+    <div class="ledger-item">
+      <div class="ledger-head">
+        <div class="ledger-id">JV <span class="hash">#2023-09</span> · closed</div>
+      </div>
+      <div class="ledger-date">Apr 2023 — Apr 2025 · Chennai</div>
+      <div class="ledger-title"><span class="fx">Dr.</span> Articled Assistant</div>
+      <div class="ledger-org">@ <b>Ernst &amp; Young LLP</b></div>
+      <ul>
+        <li>Handled <b>direct-tax assessments and litigation</b> before the CIT(A) and the Dispute Resolution Panel.</li>
+        <li>Assisted in securing a <b>₹70+ Cr refund</b> before the Income Tax Appellate Tribunal.</li>
+        <li>Attended ITAT hearings alongside Senior Counsel; contributed to Writ Petitions before the High Court.</li>
+        <li>Prepared and filed income-tax computations for Ind-AS and AS compliant companies.</li>
+      </ul>
+      <div class="ledger-stack"><span>Direct Tax</span><span>Litigation</span><span>ITAT</span><span>Ind-AS</span></div>
+    </div>
+
+    <div class="ledger-item">
+      <div class="ledger-head">
+        <div class="ledger-id">JV <span class="hash">#2022-02</span> · closed</div>
+      </div>
+      <div class="ledger-date">Apr 2022 — Mar 2023 · Chennai</div>
+      <div class="ledger-title"><span class="fx">Dr.</span> Articled Assistant</div>
+      <div class="ledger-org">@ <b>M2K, Chartered Accountants</b></div>
+      <ul>
+        <li>Led <b>internal audit</b> engagements for textile and chemical manufacturers; performed the tax audit of a listed healthcare company.</li>
+        <li>Led the <b>IFC audit</b> of an NBFC with ₹25,000 Cr AUM — Risk &amp; Control Matrices and SOPs.</li>
+        <li>Key team member for <b>fixed-assets audit</b> and physical inventory verification (₹1,000 Cr turnover), and buy-side due diligence in healthcare.</li>
+      </ul>
+      <div class="ledger-stack"><span>Internal Audit</span><span>IFC Audit</span><span>Tax Audit</span><span>Due Diligence</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="wrap">
+    <div class="tag-index">(05) — Education &amp; qualifications</div>
+    <h2 class="title">Cleared on the<span class="hl"> first attempt.</span></h2>
+    <p class="subtext">Chartered Accountant — all three levels, first attempt.</p>
+    <div class="sheet">
+      <table>
+        <thead>
+          <tr><th><span class="cellref">A</span> Qualification</th><th><span class="cellref">B</span> Year</th><th><span class="cellref">C</span> Score</th><th><span class="cellref">D</span> Remarks</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>CA Final</td><td>Nov 2024</td><td class="score">60%</td><td>Cleared in 1st attempt (exemptions in 3 subjects)</td></tr>
+          <tr><td>CA Intermediate</td><td>Dec 2021</td><td class="score">55%</td><td>Cleared in 1st attempt (exemptions in 2 subjects)</td></tr>
+          <tr><td>CA Foundation</td><td>Dec 2020</td><td class="score">70%</td><td>Cleared in 1st attempt — Distinction</td></tr>
+          <tr><td>Class XII</td><td>Mar 2020</td><td class="score">92%</td><td>Distinction</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="tag-index">(06) — Skills &amp; tools</div>
+    <h2 class="title">The <span class="hl">stack.</span></h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h4>Finance &amp; Accounting</h4>
+        <div class="tag-list">
+          <span class="tag">Financial Statement Analysis</span>
+          <span class="tag">Adjusted EBITDA / Net-Debt</span>
+          <span class="tag">Working Capital Assessment</span>
+          <span class="tag">Inter-company Reconciliation</span>
+          <span class="tag">Direct Taxation</span>
+          <span class="tag">Audit &amp; Assurance</span>
+          <span class="tag">Tender &amp; Project Finance</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Capital Markets</h4>
+        <div class="tag-list">
+          <span class="tag">IPO Advisory</span>
+          <span class="tag">Retail &amp; HNI Investor Relations</span>
+          <span class="tag">Demat &amp; Application Process</span>
+          <span class="tag">Equity Valuation &amp; Peer Benchmarking</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Banking Instruments</h4>
+        <div class="tag-list">
+          <span class="tag">Bank Guarantees (PG/BG)</span>
+          <span class="tag">Bid Security (EMD)</span>
+          <span class="tag">Insurance &amp; Surety Bonds</span>
+          <span class="tag">Letters of Award (LOA)</span>
+          <span class="tag">Working Capital Facilities</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Software &amp; AI</h4>
+        <div class="tag-list">
+          <span class="tag">MS Excel (Advanced)</span>
+          <span class="tag">MS Word</span>
+          <span class="tag">Tally ERP 9 / Prime</span>
+          <span class="tag">Claude</span>
+          <span class="tag">ChatGPT + Excel Connectors</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Certifications</h4>
+        <div class="tag-list">
+          <span class="tag">NSE — Financial Markets</span>
+          <span class="tag">CA Monk — Financial Analysis</span>
+          <span class="tag">ACCA Affiliate (10/13)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="achievements">
+  <div class="wrap">
+    <div class="tag-index">(07) — Beyond the balance sheet</div>
+    <h2 class="title">Outside the <span class="hl">ledger.</span></h2>
+    <div class="ach-grid">
+      <div class="ach-card">
+        <div class="ach-photo">
+          <img src="photos/onlyearth.jpg" alt="Only Earth trade fair" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="icon">🌿</div>
+        </div>
+        <div class="ach-body">
+          <h4>Gulfood 2026, Dubai</h4>
+          <p>Represented the group's F&amp;B venture 'Only Earth' at one of the world's largest food trade fairs, engaging international buyers and suppliers.</p>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-photo">
+          <img src="photos/calisthenics.jpg" alt="Calisthenics training" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="icon">🤸</div>
+        </div>
+        <div class="ach-body">
+          <h4>State-Level Gymnastics Champion</h4>
+          <p>Multiple inter-school competition wins; still active in calisthenics today.</p>
+        </div>
+      </div>
+      <div class="ach-card">
+        <div class="ach-photo">
+          <img src="photos/scuba.jpg" alt="Scuba diving" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+          <div class="icon">🤿</div>
+        </div>
+        <div class="ach-body">
+          <h4>Backpack Traveller</h4>
+          <p>Explored 10+ cities in the past year — comfortable operating in diverse environments, on land or underwater.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="tag-index">(08) — Get in touch</div>
+    <h2 class="title">Let's <span class="hl">talk numbers.</span></h2>
+    <div class="contact-grid">
+      <div class="contact-item">
+        <h5>Email</h5>
+        <a href="mailto:caanushgandhi777@gmail.com">caanushgandhi777@gmail.com</a>
+      </div>
+      <div class="contact-item">
+        <h5>Phone</h5>
+        <a href="tel:+918637641182">+91-8637641182</a>
+      </div>
+      <div class="contact-item">
+        <h5>Location</h5>
+        <span>Chennai, India</span>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Anush Gandhi — Chartered Accountant. All rights reserved.</div>
+  </div>
+</footer>
+
+<script>
+  // Floating finance-term word cloud
+  (function(){
+    const words = ["Balance Sheet","Assets","Liabilities","Equity","Bank","Banking","Cash Flow","Profit & Loss",
+      "Financial Statements","Audit","Taxation","Derivatives","Futures","Options","Hedge","Risk Management",
+      "Valuation","Mergers & Acquisitions","Corporate Finance","Treasury","Working Capital","IFRS","Ind AS","GAAP",
+      "Budgeting","Forecasting","Investment","Portfolio","Capital Markets","Foreign Exchange (Forex)","Bonds",
+      "Fixed Income","Private Equity","Venture Capital","Compliance","Internal Controls","Due Diligence",
+      "Financial Modelling","Cost Accounting","Management Accounting","Business Strategy","Economics","Inflation",
+      "GDP","Supply & Demand","Market Analysis","Financial Planning","Wealth Management","ESG","Digital Finance","FinTech"];
+    const holder = document.getElementById('wordCloud');
+    if(!holder) return;
+    words.forEach((w)=>{
+      const depth = Math.random();
+      const span = document.createElement('span');
+      span.className = 'float-word';
+      span.textContent = w;
+      const size = (0.75 + depth*1.65).toFixed(2);
+      const opacity = (0.035 + depth*0.13).toFixed(3);
+      const dur = (22 + Math.random()*26).toFixed(1);
+      const delay = (-Math.random()*30).toFixed(1);
+      const dx = (Math.random()*60-30).toFixed(0);
+      const dy = (Math.random()*70-45).toFixed(0);
+      const sc = (1 + Math.random()*0.08).toFixed(3);
+      const useAccent = depth > 0.55;
+      span.style.left = (Math.random()*94)+'%';
+      span.style.top = (Math.random()*92)+'%';
+      span.style.fontSize = size+'rem';
+      span.style.opacity = opacity;
+      span.style.color = useAccent ? 'var(--accent)' : 'var(--muted)';
+      span.style.filter = `blur(${((1-depth)*1.1).toFixed(2)}px)`;
+      span.style.setProperty('--dur', dur+'s');
+      span.style.setProperty('--delay', delay+'s');
+      span.style.setProperty('--dx', dx+'px');
+      span.style.setProperty('--dy', dy+'px');
+      span.style.setProperty('--sc', sc);
+      holder.appendChild(span);
+    });
+  })();
+
+  // Live IST clock
+  function tick(){
+    const d = new Date(new Date().toLocaleString('en-US',{timeZone:'Asia/Kolkata'}));
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mm = String(d.getMinutes()).padStart(2,'0');
+    const ss = String(d.getSeconds()).padStart(2,'0');
+    document.getElementById('clock').textContent = `${hh}:${mm}:${ss} IST`;
+  }
+  tick(); setInterval(tick,1000);
+
+  // Theme toggle
+  const themeBtn = document.getElementById('theme-toggle');
+  const root = document.documentElement;
+  themeBtn.addEventListener('click', ()=>{
+    const cur = root.getAttribute('data-theme');
+    root.setAttribute('data-theme', cur==='light' ? 'dark' : 'light');
+  });
+
+  // Facets toggle
+  document.querySelectorAll('.facet-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.facet-btn').forEach(b=>b.classList.remove('active'));
+      document.querySelectorAll('.facet-panel').forEach(p=>p.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelector(`.facet-panel[data-panel="${btn.dataset.facet}"]`).classList.add('active');
+    });
+  });
+
+  // Boot animation
+  (function(){
+    const boot = document.getElementById('boot');
+    const bl2 = document.getElementById('bl2');
+    const bl3 = document.getElementById('bl3');
+    const fill = document.getElementById('bootFill');
+    const pct = document.getElementById('bootPct');
+    const label = document.getElementById('bootLabel');
+    const skip = document.getElementById('boot-skip');
+
+    function finish(){ boot.classList.add('hide'); }
+    skip.addEventListener('click', finish);
+
+    function typeInto(el, text, speed, cb){
+      let i = 0;
+      el.innerHTML = '<span class="boot-cursor"></span>';
+      const iv = setInterval(()=>{
+        i++;
+        el.innerHTML = text.slice(0,i) + '<span class="boot-cursor"></span>';
+        if(i>=text.length){ clearInterval(iv); if(cb) cb(); }
+      }, speed);
+    }
+
+    typeInto(bl2, '> loading sheet: Anush_Gandhi.xlsx', 22, ()=>{
+      typeInto(bl3, '=CONCAT(A1," ",B1) → "Chartered Accountant, Finance Professional"', 14, ()=>{
+        let p = 0;
+        label.textContent = 'Calculating…';
+        const iv = setInterval(()=>{
+          p += Math.random()*18 + 6;
+          if(p>=100){ p=100; clearInterval(iv); label.textContent='Done.'; setTimeout(finish, 350); }
+          fill.style.width = p+'%';
+          pct.textContent = Math.floor(p)+'%';
+        }, 140);
+      });
+    });
+
+    setTimeout(finish, 6000);
+  })();
+</script>
+
+</body>
+</html>
